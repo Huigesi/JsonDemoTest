@@ -3,6 +3,7 @@ package com.example.jsondemo;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
@@ -16,7 +17,6 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -46,40 +46,13 @@ public class MainActivity extends ActionBarActivity {
 				new Thread(){
 					@Override
 					public void run() {
-						/*HttpPost request = new HttpPost("http://192.168.1.243:8080/transportservice/type/jason/action/GetTrafficLightConfigAciton.do");   
-						// 先封装一个 JSON 对象   
-						JSONObject param = new JSONObject();   
-						try {
-							param.put("TrafficLightId", "1");
-							//param.put("password", "123456");   
-							// 绑定到请求 Entry   
-							StringEntity se = new StringEntity(param.toString());    
-							request.setEntity(se);   
-							// 发送请求   
-							HttpResponse httpResponse = new DefaultHttpClient().execute(request);   
-							// 得到应答的字符串，这也是一个 JSON 格式保存的数据   
-							String retSrc = EntityUtils.toString(httpResponse.getEntity());   
-							// 生成 JSON 对象   
-							JSONObject result = new JSONObject( retSrc);   
-							String token = (String)result.get("RedTime"); 
-							Log.i("ds",token);
-						} catch (JSONException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (UnsupportedEncodingException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (ClientProtocolException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}   */
+					
 						String result="";
+						String id="";
+						List<String> list=new ArrayList<String>();
 						
 						HttpClient httpClient= new DefaultHttpClient();
-						HttpGet post=new HttpGet("http://192.168.1.243:8080/transportservice/type/jason/action/GetAllSense.do");
+						HttpGet post=new HttpGet("http://192.168.1.231:8080/transportservice/type/jason/action/GetAllSense.do");
 						
 						HttpResponse httpResponse;
 						try {
@@ -87,26 +60,32 @@ public class MainActivity extends ActionBarActivity {
 							if (httpResponse.getStatusLine().getStatusCode()==200) {
 								result=EntityUtils.toString(httpResponse.getEntity());
 							}
+							JSONObject jsonObject=new JSONObject(result);
+							String jsonArray=jsonObject.getString("serverinfo");
+							jsonObject=new JSONObject(jsonArray);
+							Iterator<String> iterator=jsonObject.keys();
+							while (iterator.hasNext()) {
+								String key= iterator.next();
+								String value= jsonObject.getString(key);
+								list.add(value);
+								
+							}
+							Log.i("did",list.get(1));
+
+							
 						} catch (ClientProtocolException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
-						} finally{
-							httpClient.getConnectionManager().shutdown();
-						}
-						List<String> list=new ArrayList<String>();
-						try {
-							JSONObject jsonObject=new JSONObject(result);
-							JSONArray jsonArray=jsonObject.getJSONArray("serverinfo");
-							for(int i=0;i<jsonArray.length();i++){
-								list.add(jsonArray.getString(i));
-							}
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
+						} finally{
+							httpClient.getConnectionManager().shutdown();
 						}
+						
 						Log.i("ds",result);
 						
 					}
