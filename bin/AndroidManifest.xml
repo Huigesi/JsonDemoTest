@@ -17,14 +17,14 @@
         <activity
             android:name="com.example.jsondemo.MainActivity"
             android:label="@string/app_name" >
-             <intent-filter>
+            
+        </activity>
+        <activity android:name="com.example.jsondemo.DemoActivity">
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity android:name="com.example.jsondemo.DemoActivity">
-           
         </activity>
     </application>
 
