@@ -50,12 +50,13 @@ public class MainActivity extends ActionBarActivity {
 						String result="";
 						String id="";
 						List<String> list=new ArrayList<String>();
-						
 						HttpClient httpClient= new DefaultHttpClient();
-						HttpGet post=new HttpGet("http://192.168.1.231:8080/transportservice/type/jason/action/GetAllSense.do");
+						HttpPost post=new HttpPost("http://192.168.1.231:8080/transportservice/type/jason/action/GetTrafficLightConfigAction.do");
 						
 						HttpResponse httpResponse;
+						
 						try {
+							post.setEntity(new StringEntity("{\"TrafficLightId\":" +  Integer.valueOf(5) + "}"));
 							httpResponse = httpClient.execute(post);
 							if (httpResponse.getStatusLine().getStatusCode()==200) {
 								result=EntityUtils.toString(httpResponse.getEntity());
@@ -68,8 +69,8 @@ public class MainActivity extends ActionBarActivity {
 								String key= iterator.next();
 								String value= jsonObject.getString(key);
 								list.add(value);
-								
 							}
+							System.out.println(jsonArray);
 							Log.i("did",list.get(1));
 
 							
@@ -86,7 +87,6 @@ public class MainActivity extends ActionBarActivity {
 							httpClient.getConnectionManager().shutdown();
 						}
 						
-						Log.i("ds",result);
 						
 					}
 				}.start();
